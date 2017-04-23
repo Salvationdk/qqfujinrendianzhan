@@ -1,0 +1,428 @@
+Import "GK.luae"
+Import "ShanHai.lua"
+Dim ID=-1,还原开关=0,色素相似度值=1,色素相似度=色素相似度值,相似度值=0.9,相似度=相似度值,方向=0,TM值=5,TM=TM值,键,值,intX,intY,当前分辨率,初始时间() 
+Dim 高=113
+Dim 高_计数
+main  
+Sub 原点(x,y)
+    强制还原 
+    点击 x, y
+    设置基础分辨率 
+End Sub
+Sub 原点EX(XY)
+    强制还原 
+    点击 XY(0),XY(1)
+    设置基础分辨率 
+End Sub
+Sub 特殊点击
+    If 还原开关 = 0 Then 
+        强制还原 
+        点击 intX, intY
+        设置基础分辨率 
+        Exit Sub
+    End If
+    点击 intX, intY
+End Sub
+Sub 点击(X,Y)
+    TouchDown X,Y,1
+    Delay 200
+    TouchUp 1
+    Delay 200
+End Sub
+Sub ms(d)
+    ShowMessage d
+    TracePrint d
+End Sub
+Sub 点(XY)
+    点击 XY(0),XY(1)
+End Sub
+Sub 初始化时间(ID)
+    初始时间(ID)=time()
+End Sub
+Function 时差(T,ID,M)
+    Dim 当前时间,相差时间
+    当前时间 = time()
+    相差时间 = 当前时间 - 初始时间(ID)
+    If M <> "" Then 
+        TracePrint M&"："&相差时间
+    End If
+    If 相差时间 >= T Then 
+        时差 = TRUE
+        初始化时间(ID)
+    Else 
+        时差 = false
+    End If
+End Function
+Sub 滑屏(数据)
+    If IsNull(数据(4)) Then 
+        数据(4)=500
+    End If
+    TouchDown 数据(0), 数据(1), 1
+    Delay 500
+    TouchMove 数据(2),数据(3), 1, 数据(4)
+    TouchUp 1
+    延时 1000
+End Sub
+Sub 延时(T)
+    ReleaseCapture :Delay T
+End Sub
+Sub 截屏(T)
+    Delay T:KeepCapture:Delay 100
+End Sub
+Sub 分辨率审核(x,y)
+    Exit Sub '自行添加需要支持的分辨率后可以删除Exit Sub
+    If x = 720 and y = 1280 Then 
+    ElseIf x = 1080 and y = 1920 Then 
+    Else 
+        For 5
+            ms "脚本暂不支持您的设备分辨率\n您的设备分辨率为：" & x & "*" & y
+            Delay 2000
+        Next
+        EndScript
+    End If
+End Sub
+Sub 强制还原
+    ResetScreenScale
+End Sub
+Function 还原(分辨率)
+    If 分辨率 = 当前分辨率 Then 
+        ResetScreenScale 
+        还原 = true
+        还原开关 = 1
+        还原 = true
+    Else 
+        还原=false
+    End If
+End Function
+Function 兼容7201280(数据, 模式)
+    强制还原 
+    If CStr(当前分辨率)  = "7201280" Then 
+        If 模式 = 0 Then 
+            兼容7201280 = gk.Full(数据)
+        elseIf 模式 = 1 Then 
+            兼容7201280 = gk.FullUB(数据)
+        Else 
+            TracePrint "兼容7201280模式没有定义"
+        End If
+    End If
+    设置基础分辨率
+End Function
+Function 兼容10801920(数据,模式)
+    强制还原 
+    If CStr(当前分辨率)  = "10801920" Then 
+        If 模式 = 0 Then 
+            兼容10801920 = gk.Full(数据)
+        elseIf 模式 = 1 Then 
+            兼容10801920 = gk.FullUB(数据)
+        Else 
+            TracePrint "兼容7201280模式没有定义"
+        End If
+    End If
+    设置基础分辨率
+End Function
+Function 设置基础分辨率
+    SetScreenScale 720, 1280, 0 '在此处设置你的开发分辨率，例如720，1280。注意：请勿修改第3个参数
+    还原开关=0
+End Function
+Sub 读控件
+    发送内容
+End Sub
+Function 发送内容
+    发送内容=ReadUIConfig("发送内容")
+End Function
+Sub 设定字库
+    SetDictEx 0, "Attachment:字库0.txt"
+    SetDictEx 1, "Attachment:字库1.txt"
+    SetDictEx 2, "Attachment:字库2.txt"
+End Sub
+Sub 初始化
+    dim x = GetScreenX() : dim y = GetScreenY():dim d=Device.GetDPI()
+    当前分辨率 = Cint(x & y)
+    ms "您的设备分辨率为：" & x & "*" & y&":"&d
+    设置基础分辨率
+    Delay 1000
+    Call 分辨率审核(x,y) 
+    设定字库
+    读控件
+    初始化时间(0)
+End Sub
+Sub 登录处理程序集
+    //当前脚本第145行：com.tencent.mobileqq
+    If Sys.GetFront() = "com.tencent.mobileqq" Then 
+        TracePrint "运行qq"
+    Else
+        ShowMessage "请运行qq", 6000
+        Delay 6000
+        EndScript
+    End If
+End Sub
+Sub 任务处理程序集
+End Sub
+Sub 通用处理程序集
+    消息界面 
+    加好友OR群 
+    添加 
+    附近人 
+    筛选附近人 
+    附近已筛选 
+    //    滑动 
+    好友_发消息 
+    聊天 
+//    点赞不够送礼
+    点赞达到上限 
+    金豆数量不足 
+    知道了
+End Sub
+Sub 知道了
+	If gk.Full("311|768|F2B91E-101010,327|763|FEF9EC-101010,345|763|FFFDF8-101010,352|763|FFFEFB-101010,357|763|FFFFFF-101010,368|763|FEFCF4-101010,384|763|FFFFFF-101010,387|763|F2B91E-101010") Then 
+		ms "知道了"
+	End If
+End Sub
+Dim 金豆是否不足
+sub 金豆数量不足
+    If gk.Full("291|591|000000-101010,320|590|0E0E0E-101010,341|591|000000-101010,367|589|000000-101010,413|586|000000-101010,425|586|000000-101010",false) Then 
+        界面 "金豆数量不足"
+        Delay 500
+        If gk.Full("250|724|000000-101010,258|724|000000-101010,273|724|000000-101010,283|725|080808-101010,288|729|060606-101010,289|731|131313-101010") Then 
+            ms "取消"
+            金豆是否不足=true
+        End If
+    End If
+End sub
+Sub 点赞达到上限
+    If gk.Full("214|535|000000-101010,225|535|000000-101010,243|533|181818-101010,258|534|000000-101010,281|535|000000-101010,320|535|000000-101010,320|535|000000-101010",false) Then 
+        界面 "点赞达到上限"
+        If gk.Full("254|661|F3B61F-101010,259|661|F3B61F-101010,266|662|F3B723-101010,281|660|F3B61F-101010,290|660|F3B61F-101010,416|660|F3B61F-101010,456|660|F3B61F-101010,449|660|F3B61F-101010") Then 
+            ms "继续，且今日提醒"
+        End If
+    End If
+End Sub
+Sub 点赞不够送礼
+    If gk.Full("220|618|000000-101010,226|618|000000-101010,226|623|000000-101010,244|626|000000-101010,260|626|000000-101010,451|631|000000-101010,288|701|2C2C2C-101010,442|699|1D1D1D-101010",false) Then 
+        界面 "点赞不够送礼"
+        If gk.Full("247|687|FFFFFF-101010,250|687|000000-101010,257|687|000000-101010,267|688|000000-101010,283|688|080808-101010,287|692|171717-101010,289|694|131313-101010,291|694|FFFFFF-101010") Then 
+            ms "取消"
+        End If
+    End If
+End Sub
+Sub 聊天
+    If gk.Full("67|59|FFFFFF-101010,693|49|F5B712-101010,686|49|FEF7E5-101010,679|49|F5B712-101010,639|49|FEFAEF-101010,632|48|FEFAEF-101010",false) Then 
+        界面 "聊天"
+        Delay 100
+        Tap 120, 1197
+        Delay 100
+        InputText 发送内容()
+        Delay 500
+        Tap 672,1196
+//        If gk.Full("655|1197|F5B712-101010,658|1197|FFFEFA-101010,674|1199|FEF9EB-101010,679|1200|FFFFFF-101010,687|1200|FFFFFF-101010,687|1207|FFFFFF-101010,660|1207|FFFEFD-101010") Then 
+//            ms "发送"
+//        End If
+        Delay 1000
+        If gk.Full("14|53|FFFFFE-101010,18|53|F5B712-101010,35|53|FFFCF6-101010,39|53|FFFDF9-101010,44|54|FFFFFF-101010,53|54|FEF8E7-101010,58|54|FEFBF2-101010,68|54|FEFBF2-101010") Then 
+            ms "返回"
+        End If
+    End If
+End Sub
+Sub 好友_发消息
+    If gk.Full("67|53|F2F2F2-101010,685|54|FFFFFF-101010,275|1238|FFFFFF-101010,73|1229|FFFFFF-101010,155|1241|000000-101010",false) Then 
+        界面 "好友_发消息"
+        Delay 1000
+        If not 金豆是否不足 Then 
+        	 截屏 1000
+        	 Dim d1()
+        	 d1(0) = {"664|671|FFFFFF-101010,662|677|FFFFFF-101010,661|686|FFFFFF-101010,679|686|FFFFFF-101010,684|679|FFFFFF-101010,673|661|FFFFFF-101010"}
+        	 d1(1)={"661|638|FFFFFF-101010,664|634|FFFFFF-101010,673|625|FFFFFF-101010,684|643|FFFFFF-101010,671|650|FFFFFF-101010"}
+            If gk.FullUB(d1) Then 
+                ms "点赞1"
+            End If
+//            截屏 1000
+//            dim d()= gk.Full2("660|674|F5B712-101010,667|673|F5B712-101010,672|665|F5B712-101010,681|670|F5B712-101010,681|684|F5B712-101010,668|684|F5B712-101010",false)
+//            If d(0) Then 
+//                TracePrint d(1)&","&d(2)
+//                For 10
+//                    Delay 1000
+//                    ms "点赞2"
+//                    Tap d(1),d(2)
+//                Next
+//            End If
+        End If
+        截屏 1000
+        点赞不够送礼 
+         截屏 1000
+        If gk.Full("504|1235|F2B91E-101010,567|1236|FFFFFF-101010,592|1236|FFFEFB-101010,609|1236|FFFFFF-101010,622|1236|FFFFFF-101010,626|1236|F2B91E-101010") Then 
+            ms "发消息"
+            金豆是否不足=False
+        Else 
+            //点击返回
+            金豆是否不足=False
+            ms  "点击返回"
+            Tap 38,51
+        End If
+    End If
+End Sub
+Sub 滑动
+    //		Delay 3000
+    TouchDown 288, 1270, 1
+    TouchMove 288, 160, 1,3000
+    Delay 1000
+    TouchUp 1
+    已经获取第一个人的位置 = false
+    Delay 1000
+End Sub
+Dim dx,dy
+Dim 已经获取第一个人的位置
+Sub 第一个人的位置
+    Dim d()=gk.Full2(0,0,0,0,"F5CDAF-101010","35|0|F5CDAE-101010,35|13|F5CDAF-101010,0|13|F5CDAF-101010,12|3|FFFCFA-101010",false)
+    If d(0) Then 
+    	TracePrint "读取第一个位置"
+        TracePrint d(1)&","&d(2)
+        dx = d(1)
+        dy = d(2)
+        //291-178=113
+    End If
+End Sub
+Sub 附近已筛选
+    If gk.Full("66|52|FFFFFF-101010,343|39|FEF9EA-101010,371|42|FFFFFF-101010,373|49|FEFAED-101010,373|52|FFFFFF-101010,376|65|FDF4DB-101010,376|71|FEF7E4-101010,359|69|FEF5DE-101010,344|69|FDF2D3-101010",false) Then 
+        界面 "附近已筛选"
+        //高112
+        //28,57
+        //B9DC5D
+        //257
+        //第一个点 28,314
+        //1279 屏幕高
+        //头部高度 131 滑动距离 1279-131=1148
+        // 更新更稳定的  116,29
+        If not 已经获取第一个人的位置 Then 
+            第一个人的位置 
+            已经获取第一个人的位置=true
+        End If
+        //        Do
+        截屏 1000
+        TracePrint 高_计数*高
+        TracePrint dx&","&(dy+高_计数*高)
+        //当前脚本第210行：F4CCAE
+        //当前脚本第211行：F4CDAE
+        //647,188 直播的位置  颜色 A8D52F  117+530,178+10
+        //647,167  A8D52F   116+531,157+10
+        //F7C39C
+        //广告 107  113-107=5
+        //当前脚本第293行：EFEFEE
+        If gk.Full(dx, dy + 高_计数 * 高) = "F5CDAF" or "F4CCAE" =gk.Full(dx, dy + 高_计数 * 高) or "F4CDAE" =gk.Full(dx, dy + 高_计数 * 高)Then 
+            TracePrint  "发现颜色"
+            截屏 1000
+            TracePrint "直播坐标:"&(dx + 531)&","&(dy + 高_计数 * 高 + 10)
+            If gk.Full(dx + 531, dy + 高_计数 * 高 + 10) = "A8D52F" Then 
+                TracePrint "发现直播"
+            Else
+                TracePrint "可以点击用户"
+                Tap dx, dy + 高_计数 * 高
+            End If
+        ElseIf gk.Full(dx, dy + 高_计数 * 高) = "EFEFEE" Then
+            TracePrint "发现广告"
+            dy = dy - 113 + 108
+            //当前脚本第305行：000000  
+            TracePrint gk.Full(dx,dy+高_计数*高)
+        ElseIf gk.Full(dx, dy + 高_计数 * 高) ="000000"
+            ms "滑动"
+            滑动 
+            高_计数=0
+         End If
+            TracePrint "计数:"&高_计数
+            高_计数 = 高_计数 + 1
+            TracePrint "计数:"&高_计数
+            //        Loop
+       
+    End If
+End Sub
+Function 新鲜事
+    新鲜事 = gk.Full("631|134|EFEFEE-101010,630|126|FFFFFF-101010,630|174|EFEFEE-101010,627|177|79635E-101010,619|181|EFEFEE-101010,615|183|79635E-101010,622|204|79635E-101010",false)
+End Function
+Sub 筛选附近人
+    If gk.Full("297|1118|000000-101010,308|1118|000000-101010,320|1118|000000-101010,330|1118|000000-101010,348|1118|000000-101010,356|1118|000000-101010,364|1118|000000-101010,376|1118|000000-101010,384|1118|000000-101010") Then 
+        ms "筛选附近人"
+    End If
+    If gk.Full("57|51|FFFFFF-101010,310|51|FFFFFF-101010,340|52|FFFFFF-101010,347|52|FFFFFF-101010,356|52|FFFFFF-101010,364|52|FFFFFF-101010,376|52|FFFFFF-101010,390|52|FEFAED-101010,401|52|FFFFFF-101010",false) Then 
+        界面 "筛选附近的人"
+        If gk.Full("342|135|E2A90D-101010,350|135|FFFFFF-101010,351|127|E0A500-101010,355|130|E0A500-101010,361|130|000000-101010,367|130|000000-101010,373|130|000000-101010") Then 
+            ms "男"
+        End If
+        Delay 1000
+        If gk.Full("670|46|FFFFFF-101010,685|46|FFFFFF-101010,694|46|FFFFFF-101010,704|46|FFFFFF-101010,708|46|F5B712-101010") Then 
+            ms "完成"
+        End If
+    End If
+End Sub
+Dim 是否筛选
+Sub 附近人
+    If gk.Full("66|52|FFFFFF-101010,348|48|FFFFFF-101010,356|49|FFFFFF-101010,369|49|FFFFFF-101010,379|51|FFFDF8-101010,411|51|F5B712-101010", false) Then 
+        界面 "附近人"
+        If not 是否筛选 Then 
+            If gk.Full("687|53|FEF8E8-101010,696|53|FEF8E8-101010,705|53|FEF8E8-101010,691|53|F5B712-101010,700|53|F5B712-101010") Then 
+                ms "筛选"
+                是否筛选=true
+            End If
+        End If
+    End If
+End Sub
+Sub 添加
+    If gk.Full("67|55|FEFBF2-101010,363|48|FFFCF6-101010,350|49|FFFFFF-101010,373|52|FFFCF6-101010,379|51|FFFFFF-101010,655|46|F5B712-101010",false) Then 
+        界面 "添加"
+        If gk.Full("22|511|79635F-101010,30|511|79635F-101010,32|511|79635F-101010,41|511|79635F-101010,72|513|000000-101010,78|513|000000-101010,99|513|000000-101010,105|513|0E0E0E-101010") Then 
+            ms "查看附近的人"
+        End If
+    End If
+End Sub
+Sub 加好友OR群
+    If GK.Full("552|172|79635F-101010,553|178|79635F-101010,555|182|FFFFFF-101010,587|182|000000-101010,590|182|181818-101010,595|182|1A1A1A-101010,602|180|000000-101010,610|180|3C3C3C-101010,626|180|000000-101010,648|180|000000-101010") Then 
+        ms "加好友/群"
+    End If
+End Sub
+Sub 界面(d)
+    TracePrint d&"界面"
+End Sub
+Sub 消息界面
+    If gk.Full("164|50|F5B712-101010,295|53|FFFFFF-101010,373|48|F5B712-101010,461|47|F5B712-101010,697|53|FFFFFF-101010",false) Then 
+        界面 "消息"
+        If gk.Full("686|47|F5B712-101010,693|47|FFFFFF-101010,696|47|F5B712-101010,696|54|FFFFFF-101010,696|58|F5B712-101010,693|58|FFFFFF-101010,689|58|F5B712-101010") Then 
+            ms "添加"
+        End If
+    End If
+End Sub
+Sub 计时处理程序集
+//	试用时间
+End Sub
+Function main
+    Dim i=0
+    初始化
+    Do
+        截屏 1000
+        登录处理程序集 
+        任务处理程序集
+        通用处理程序集 
+//        计时处理程序集
+        i = i + 1
+        TracePrint "====已循环第"&i&"轮===="
+    Loop
+End Function
+Dim 运行状态="试用时间"
+Dim 已经运行时间
+Sub 试用时间
+    Dim 文件名="game1"
+    Dim 运行时间=File.ReadLine(文件名,1)
+    TracePrint "运行时间:"&运行时间
+    If 运行时间 <> "" and 运行状态 = "试用时间" Then 
+        TracePrint "运行时间"&CInt(ShanHai.Base64De(运行时间))
+        if CInt(ShanHai.Base64De(运行时间))  > 60*1000*15 Then 
+            ShowMessage "试用时间超过15分钟"
+            //运行状态 = "验证窗口"
+            EndScript 
+        End If
+    End If
+    //    TracePrint "运行时间："& (TickCount()- 已经运行时间 )
+    //    已经运行时间=TickCount()
+    File.Write 文件名, ShanHai.Base64En(CStr(TickCount()))
+    File.DeleteLine(文件名, file.LinesNumber(文件名) )
+    File.Write 文件名, ShanHai.Base64En(CStr(CInt(ShanHai.Base64De(运行时间))+TickCount()- 已经运行时间))
+    已经运行时间=TickCount()
+End Sub
+//特别注意：必须在模板中的“设置基础分辨率”函数中设置你当前设备用于开发的分辨率，例如720,1280
